@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>手机价格管理后台</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f8fafc;
+      min-height: 100vh;
+    }
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px 24px;
+    }
+    .header h1 { font-size: 24px; margin-bottom: 4px; }
+    .header p { opacity: 0.8; font-size: 14px; }
+    .nav {
+      background: white;
+      padding: 12px 24px;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      gap: 16px;
+    }
+    .nav a {
+      color: #64748b;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .nav a:hover, .nav a.active {
+      background: #f1f5f9;
+      color: #1e293b;
+    }
+    .container {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .card h2 {
+      font-size: 18px;
+      margin-bottom: 16px;
+      color: #1e293b;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 10px 8px;
+      text-align: left;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 13px;
+    }
+    th {
+      background: #f8fafc;
+      font-weight: 600;
+      color: #64748b;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .btn {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    .btn-success {
+      background: #10b981;
+      color: white;
+    }
+    .btn-secondary {
+      background: #f1f5f9;
+      color: #475569;
+    }
+    .btn-danger {
+      background: #fef2f2;
+      color: #dc2626;
+    }
+    .btn-edit {
+      background: #eff6ff;
+      color: #2563eb;
+    }
+    .btn-group { display: flex; gap: 6px; }
+    .form-group {
+      margin-bottom: 14px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: #374151;
+    }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      font-size: 13px;
+    }
+    .form-group input:focus, .form-group select:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .form-row-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .status {
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .status.success { background: #ecfdf5; color: #065f46; }
+    .status.warning { background: #fffbeb; color: #92400e; }
+    .status.danger { background: #fef2f2; color: #991b1b; }
+    .phone-img {
+      width: 45px;
+      height: 45px;
+      object-fit: contain;
+      background: #f8fafc;
+      border-radius: 4px;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .stat-card .value {
+      font-size: 28px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .stat-card .label {
+      font-size: 13px;
+      color: #64748b;
+    }
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal.active { display: flex; }
+    .modal-content {
+      background: white;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 800px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid #f1f5f9;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      background: white;
+      z-index: 10;
+    }
+    .modal-header h3 {
+      font-size: 18px;
+      color: #1e293b;
+    }
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #64748b;
+    }
+    .modal-body {
+      padding: 24px;
+    }
+    .modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid #f1f5f9;
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      position: sticky;
+      bottom: 0;
+      background: white;
+    }
+    .section-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1e293b;
+      margin: 20px 0 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #667eea;
+    }
+    .section-title:first-child { margin-top: 0; }
+    .price-highlight {
+      color: #dc2626;
+      font-weight: 700;
+    }
+    .official-price {
+      color: #64748b;
+      font-size: 11px;
+    }
+    .specs-preview {
+      font-size: 11px;
+      color: #64748b;
+      max-width: 150px;
+    }
+    .toolbar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .search-box {
+      flex: 1;
+      min-width: 200px;
+      padding: 8px 12px;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      font-size: 13px;
+    }
+    .filter-select {
+      padding: 8px 12px;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      font-size: 13px;
+      min-width: 120px;
+    }
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      padding: 12px 20px;
+      border-radius: 8px;
+      color: white;
+      font-size: 14px;
+      z-index: 2000;
+      animation: slideIn 0.3s ease;
+    }
+    .toast.success { background: #10b981; }
+    .toast.error { background: #ef4444; }
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>📱 手机价格管理后台</h1>
+    <p>管理手机数据、品牌、价格和详细参数</p>
+  </div>
+  
+  <div class="nav">
+    <a href="/admin" class="active">📊 数据管理</a>
+    <a href="/crawler">🔄 数据爬取</a>
+  </div>
+
+  <div class="container">
+    <div class="stats">
+      <div class="stat-card">
+        <div class="value" id="totalPhones">-</div>
+        <div class="label">手机总数</div>
+      </div>
+      <div class="stat-card">
+        <div class="value" id="totalBrands">-</div>
+        <div class="label">品牌数量</div>
+      </div>
+      <div class="stat-card">
+        <div class="value" id="avgPrice">-</div>
+        <div class="label">平均卖价</div>
+      </div>
+      <div class="stat-card">
+        <div class="value" id="withSpecs">-</div>
+        <div class="label">有参数数据</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📱 手机列表</h2>
+      <div class="toolbar">
+        <input type="text" class="search-box" id="searchBox" placeholder="搜索型号、品牌..." onkeyup="filterPhones()">
+        <select class="filter-select" id="brandFilter" onchange="filterPhones()">
+          <option value="">全部品牌</option>
+        </select>
+        <select class="filter-select" id="statusFilter" onchange="filterPhones()">
+          <option value="">全部状态</option>
+          <option value="现货">现货</option>
+          <option value="没货">没货</option>
+          <option value="正常">正常</option>
+        </select>
+        <button class="btn btn-primary" onclick="openAddModal()">➕ 添加手机</button>
+        <button class="btn btn-success" onclick="location.href='/crawler'">🔄 同步官方数据</button>
+      </div>
+      <div style="overflow-x: auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>图片</th>
+              <th>品牌</th>
+              <th>型号</th>
+              <th>配置</th>
+              <th>颜色</th>
+              <th>卖价</th>
+              <th>官方价</th>
+              <th>参数</th>
+              <th>状态</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="phoneList">
+            <tr><td colspan="10" style="text-align:center;color:#64748b;">加载中...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 编辑弹窗 -->
+  <div class="modal" id="editModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modalTitle">编辑手机</h3>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="editId">
+        
+        <div class="section-title">📦 基本信息</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>品牌 *</label>
+            <select id="editBrandId" required></select>
+          </div>
+          <div class="form-group">
+            <label>型号 *</label>
+            <input type="text" id="editModel" placeholder="如: Reno13" required>
+          </div>
+          <div class="form-group">
+            <label>颜色 *</label>
+            <input type="text" id="editColor" placeholder="如: 黑色" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>RAM (GB)</label>
+            <input type="number" id="editRam" placeholder="如: 12">
+          </div>
+          <div class="form-group">
+            <label>存储 (GB)</label>
+            <input type="number" id="editStorage" placeholder="如: 256">
+          </div>
+          <div class="form-group">
+            <label>网络类型</label>
+            <select id="editNetworkType">
+              <option value="5G">5G</option>
+              <option value="4G">4G</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="section-title">💰 价格信息</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>卖价 (您的售价) *</label>
+            <input type="number" id="editPrice" placeholder="如: 2599" required>
+          </div>
+          <div class="form-group">
+            <label>官方价格</label>
+            <input type="number" id="editOfficialPrice" placeholder="如: 2699">
+          </div>
+          <div class="form-group">
+            <label>库存状态</label>
+            <select id="editAvailability">
+              <option value="现货">现货</option>
+              <option value="正常">正常</option>
+              <option value="怕抓">怕抓</option>
+              <option value="没货">没货</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="section-title">📸 图片</div>
+        <div class="form-group">
+          <label>图片URL</label>
+          <input type="text" id="editImageUrl" placeholder="https://...">
+          <div id="imagePreview" style="margin-top:8px;"></div>
+        </div>
+
+        <div class="section-title">📋 详细参数</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>📱 屏幕尺寸</label>
+            <input type="text" id="editScreenSize" placeholder="如: 6.7英寸">
+          </div>
+          <div class="form-group">
+            <label>🔋 电池容量</label>
+            <input type="text" id="editBattery" placeholder="如: 5000mAh">
+          </div>
+          <div class="form-group">
+            <label>💻 处理器</label>
+            <input type="text" id="editCpu" placeholder="如: 骁龙8 Gen3">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>📷 摄像头</label>
+            <input type="text" id="editCamera" placeholder="如: 5000万像素三摄">
+          </div>
+          <div class="form-group">
+            <label>⚖️ 重量</label>
+            <input type="text" id="editWeight" placeholder="如: 195g">
+          </div>
+          <div class="form-group">
+            <label>⚙️ 操作系统</label>
+            <input type="text" id="editOs" placeholder="如: ColorOS 15">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>📐 尺寸</label>
+          <input type="text" id="editDimensions" placeholder="如: 162.5×75.3×8.2mm">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal()">取消</button>
+        <button class="btn btn-primary" onclick="savePhone()">💾 保存</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = '/api/phones';
+    let allPhones = [];
+    let brands = [];
+
+    // 加载品牌列表
+    async function loadBrands() {
+      try {
+        const res = await fetch(`${API_BASE}/brands`);
+        brands = await res.json();
+        
+        const brandSelect = document.getElementById('editBrandId');
+        const brandFilter = document.getElementById('brandFilter');
+        
+        brandSelect.innerHTML = brands.map(b => 
+          `<option value="${b.id}">${b.name}</option>`
+        ).join('');
+        
+        brandFilter.innerHTML = '<option value="">全部品牌</option>' + 
+          brands.map(b => `<option value="${b.name}">${b.name}</option>`).join('');
+      } catch (e) {
+        console.error('加载品牌失败:', e);
+      }
+    }
+
+    // 加载手机列表
+    async function loadPhones() {
+      try {
+        const res = await fetch(API_BASE);
+        allPhones = await res.json();
+        
+        // 更新统计
+        document.getElementById('totalPhones').textContent = allPhones.length;
+        const brandSet = new Set(allPhones.map(p => p.brand_name));
+        document.getElementById('totalBrands').textContent = brandSet.size;
+        const avgPrice = allPhones.length > 0 
+          ? Math.round(allPhones.reduce((s, p) => s + Number(p.price), 0) / allPhones.length)
+          : 0;
+        document.getElementById('avgPrice').textContent = '¥' + avgPrice;
+        const withSpecs = allPhones.filter(p => p.cpu || p.battery || p.screen_size).length;
+        document.getElementById('withSpecs').textContent = withSpecs;
+        
+        renderPhones(allPhones);
+      } catch (e) {
+        document.getElementById('phoneList').innerHTML = 
+          `<tr><td colspan="10" style="text-align:center;color:#dc2626;">加载失败: ${e.message}</td></tr>`;
+      }
+    }
+
+    // 渲染手机列表
+    function renderPhones(phones) {
+      const tbody = document.getElementById('phoneList');
+      if (phones.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;color:#64748b;">暂无数据</td></tr>';
+        return;
+      }
+      
+      tbody.innerHTML = phones.map(p => `
+        <tr>
+          <td>
+            ${p.image_url 
+              ? `<img src="/api/image-proxy?url=${encodeURIComponent(p.image_url)}" class="phone-img" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2250%22>📱</text></svg>'">`
+              : '<span style="font-size:24px">📱</span>'}
+          </td>
+          <td><strong>${p.brand_name || '-'}</strong></td>
+          <td>${p.model}</td>
+          <td>${p.ram || 0}GB + ${p.storage || 0}GB</td>
+          <td>${p.color || '-'}</td>
+          <td class="price-highlight">¥${Number(p.price).toLocaleString()}</td>
+          <td>
+            ${p.official_price ? `<span class="official-price">¥${Number(p.official_price).toLocaleString()}</span>` : '-'}
+          </td>
+          <td>
+            <div class="specs-preview">
+              ${p.cpu ? '💻' + p.cpu.substring(0,10) + '<br>' : ''}
+              ${p.battery ? '🔋' + p.battery : ''}
+            </div>
+          </td>
+          <td>
+            <span class="status ${p.availability === '现货' ? 'success' : p.availability === '没货' ? 'danger' : 'warning'}">
+              ${p.availability || '正常'}
+            </span>
+          </td>
+          <td>
+            <div class="btn-group">
+              <button class="btn btn-edit" onclick="openEditModal(${p.id})">✏️ 编辑</button>
+              <button class="btn btn-danger" onclick="deletePhone(${p.id})">🗑️</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // 筛选手机
+    function filterPhones() {
+      const search = document.getElementById('searchBox').value.toLowerCase();
+      const brand = document.getElementById('brandFilter').value;
+      const status = document.getElementById('statusFilter').value;
+      
+      let filtered = allPhones.filter(p => {
+        const matchSearch = !search || 
+          p.model.toLowerCase().includes(search) || 
+          (p.brand_name && p.brand_name.toLowerCase().includes(search));
+        const matchBrand = !brand || p.brand_name === brand;
+        const matchStatus = !status || p.availability === status;
+        return matchSearch && matchBrand && matchStatus;
+      });
+      
+      renderPhones(filtered);
+    }
+
+    // 打开添加弹窗
+    function openAddModal() {
+      document.getElementById('modalTitle').textContent = '➕ 添加手机';
+      document.getElementById('editId').value = '';
+      clearForm();
+      document.getElementById('editModal').classList.add('active');
+    }
+
+    // 打开编辑弹窗
+    async function openEditModal(id) {
+      try {
+        const res = await fetch(`${API_BASE}/${id}`);
+        const phone = await res.json();
+        
+        document.getElementById('modalTitle').textContent = '✏️ 编辑手机 - ' + phone.model;
+        document.getElementById('editId').value = phone.id;
+        document.getElementById('editBrandId').value = phone.brand_id;
+        document.getElementById('editModel').value = phone.model || '';
+        document.getElementById('editColor').value = phone.color || '';
+        document.getElementById('editRam').value = phone.ram || '';
+        document.getElementById('editStorage').value = phone.storage || '';
+        document.getElementById('editNetworkType').value = phone.network_type || '5G';
+        document.getElementById('editPrice').value = phone.price || '';
+        document.getElementById('editOfficialPrice').value = phone.official_price || '';
+        document.getElementById('editAvailability').value = phone.availability || '正常';
+        document.getElementById('editImageUrl').value = phone.image_url || '';
+        document.getElementById('editScreenSize').value = phone.screen_size || '';
+        document.getElementById('editBattery').value = phone.battery || '';
+        document.getElementById('editCpu').value = phone.cpu || '';
+        document.getElementById('editCamera').value = phone.camera || '';
+        document.getElementById('editWeight').value = phone.weight || '';
+        document.getElementById('editOs').value = phone.os || '';
+        document.getElementById('editDimensions').value = phone.dimensions || '';
+        
+        // 图片预览
+        updateImagePreview();
+        
+        document.getElementById('editModal').classList.add('active');
+      } catch (e) {
+        showToast('加载失败: ' + e.message, 'error');
+      }
+    }
+
+    // 更新图片预览
+    function updateImagePreview() {
+      const url = document.getElementById('editImageUrl').value;
+      const preview = document.getElementById('imagePreview');
+      if (url) {
+        preview.innerHTML = `<img src="${url}" style="max-width:100px;max-height:100px;border-radius:8px;" onerror="this.style.display='none'">`;
+      } else {
+        preview.innerHTML = '';
+      }
+    }
+    document.getElementById('editImageUrl').addEventListener('input', updateImagePreview);
+
+    // 关闭弹窗
+    function closeModal() {
+      document.getElementById('editModal').classList.remove('active');
+    }
+
+    // 清空表单
+    function clearForm() {
+      ['editModel', 'editColor', 'editRam', 'editStorage', 'editPrice', 'editOfficialPrice',
+       'editImageUrl', 'editScreenSize', 'editBattery', 'editCpu', 'editCamera', 
+       'editWeight', 'editOs', 'editDimensions'].forEach(id => {
+        document.getElementById(id).value = '';
+      });
+      document.getElementById('editNetworkType').value = '5G';
+      document.getElementById('editAvailability').value = '正常';
+      document.getElementById('imagePreview').innerHTML = '';
+    }
+
+    // 保存手机
+    async function savePhone() {
+      const id = document.getElementById('editId').value;
+      const data = {
+        brand_id: document.getElementById('editBrandId').value,
+        model: document.getElementById('editModel').value,
+        color: document.getElementById('editColor').value,
+        ram: parseInt(document.getElementById('editRam').value) || 0,
+        storage: parseInt(document.getElementById('editStorage').value) || 0,
+        network_type: document.getElementById('editNetworkType').value,
+        price: parseFloat(document.getElementById('editPrice').value) || 0,
+        official_price: parseFloat(document.getElementById('editOfficialPrice').value) || null,
+        availability: document.getElementById('editAvailability').value,
+        image_url: document.getElementById('editImageUrl').value || null,
+        screen_size: document.getElementById('editScreenSize').value || null,
+        battery: document.getElementById('editBattery').value || null,
+        cpu: document.getElementById('editCpu').value || null,
+        camera: document.getElementById('editCamera').value || null,
+        weight: document.getElementById('editWeight').value || null,
+        os: document.getElementById('editOs').value || null,
+        dimensions: document.getElementById('editDimensions').value || null,
+      };
+      
+      if (!data.model || !data.brand_id) {
+        showToast('请填写品牌和型号', 'error');
+        return;
+      }
+      
+      try {
+        const url = id ? `${API_BASE}/${id}` : API_BASE;
+        const method = id ? 'PUT' : 'POST';
+        
+        const res = await fetch(url, {
+          method,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        
+        if (!res.ok) throw new Error('保存失败');
+        
+        showToast(id ? '修改成功!' : '添加成功!', 'success');
+        closeModal();
+        loadPhones();
+      } catch (e) {
+        showToast('保存失败: ' + e.message, 'error');
+      }
+    }
+
+    // 删除手机
+    async function deletePhone(id) {
+      if (!confirm('确定要删除这个手机吗?')) return;
+      try {
+        await fetch(`${API_BASE}/${id}`, { method: 'DELETE' });
+        showToast('删除成功!', 'success');
+        loadPhones();
+      } catch (e) {
+        showToast('删除失败: ' + e.message, 'error');
+      }
+    }
+
+    // 显示提示
+    function showToast(msg, type = 'success') {
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.textContent = msg;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    // 初始化
+    loadBrands();
+    loadPhones();
+  </script>
+</body>
+</html>

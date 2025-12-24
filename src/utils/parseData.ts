@@ -1,4 +1,4 @@
-import { Phone, PhoneGroup } from '../types';
+import { PhoneGroup } from '../types';
 
 export function parsePhoneData(data: string): PhoneGroup[] {
   // 按行分割数据
@@ -21,10 +21,10 @@ export function parsePhoneData(data: string): PhoneGroup[] {
     }
     
     // 解析手机数据
-    const match = line.match(/([A-Za-z0-9\s\+]+)\s+(\d+)\+(\d+)\s*(?:5g|4g)?\s*([^\d]+)\s*(\d+)(?:¥|￥)?\s*(现货|怕抓|没货|原封|نەخ مال)?/i);
+    const match = line.match(/([A-Za-z0-9\s+]+)\s+(\d+)\+(\d+)\s*(?:5g|4g)?\s*([^\d]+)\s*(\d+)(?:¥|￥)?\s*(现货|怕抓|没货|原封|نەخ مال)?/i);
     
     if (match) {
-      const [_, model, ram, storage, color, price, status] = match;
+      const [, model, ram, storage, color, price, status] = match;
       
       // 清理数据
       const cleanModel = model.trim();
@@ -37,21 +37,28 @@ export function parsePhoneData(data: string): PhoneGroup[] {
       if (!brand) {
         if (cleanModel.toLowerCase().includes('reno') || cleanModel.toLowerCase().includes('find')) {
           brand = 'OPPO';
-        } else if (cleanModel.toLowerCase().includes('a3') || cleanModel.toLowerCase().includes('a5')) {
+        } else if (cleanModel.toLowerCase().includes('a3') || cleanModel.toLowerCase().includes('a5') || cleanModel.toLowerCase().includes('a1') || cleanModel.toLowerCase().includes('a2') || cleanModel.toLowerCase().includes('a96') || cleanModel.toLowerCase().includes('k12')) {
           brand = 'OPPO';
-        } else if (cleanModel.toLowerCase().includes('ace')) {
+        } else if (cleanModel.toLowerCase().includes('ace') || cleanModel.toLowerCase().includes('一加')) {
           brand = '一加';
-        } else if (cleanModel.toLowerCase().includes('realme') || cleanModel.toLowerCase().includes('真我')) {
+        } else if (cleanModel.toLowerCase().includes('realme') || cleanModel.toLowerCase().includes('真我') || cleanModel.toLowerCase().includes('v60') || cleanModel.toLowerCase().includes('v70') || cleanModel.toLowerCase().includes('neo')) {
           brand = 'realme';
-        } else if (cleanModel.toLowerCase().includes('x') || cleanModel.toLowerCase().includes('y') || cleanModel.toLowerCase().includes('iqoo')) {
+        } else if (cleanModel.toLowerCase().includes('iqoo')) {
           brand = 'vivo';
-        } else if (cleanModel.toLowerCase().includes('红米') || cleanModel.toLowerCase().includes('note')) {
+        } else if (cleanModel.toLowerCase().includes('x200') || cleanModel.toLowerCase().includes('y3') || cleanModel.toLowerCase().includes('y1')) {
+          brand = 'vivo';
+        } else if (cleanModel.toLowerCase().includes('红米') || cleanModel.toLowerCase().includes('note') || cleanModel.toLowerCase().includes('power') || cleanModel.toLowerCase().includes('pilay')) {
           brand = '红米';
-        } else if (cleanModel.toLowerCase().includes('荣耀')) {
+        } else if (cleanModel.toLowerCase().includes('荣耀') || cleanModel.toLowerCase().includes('畅玩') || cleanModel.toLowerCase().includes('畅享')) {
           brand = '荣耀';
-        } else if (cleanModel.toLowerCase().includes('16')) {
+        } else if (cleanModel.match(/^16\s/i) || cleanModel.toLowerCase().includes('promax')) {
           brand = 'iPhone';
         }
+      }
+      
+      // 跳过没有品牌的数据
+      if (!brand || !brand.trim()) {
+        return;
       }
       
       // 查找或创建品牌组
