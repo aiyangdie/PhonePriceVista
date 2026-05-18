@@ -1,79 +1,105 @@
-# 📱 PhonePriceVista - 手机价格展示系统
+<p align="center">
+  <img src="https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react" alt="React">
+  <img src="https://img.shields.io/badge/TypeScript-4.9-3178C6?style=for-the-badge&logo=typescript" alt="TypeScript">
+  <img src="https://img.shields.io/badge/Node.js-Express-339933?style=for-the-badge&logo=node.js" alt="Node.js">
+  <img src="https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge&logo=mysql" alt="MySQL">
+  <img src="https://img.shields.io/badge/MUI-5.14-007FFF?style=for-the-badge&logo=mui" alt="MUI">
+  <img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge" alt="License">
+</p>
+
+<h1 align="center">📱 PhonePriceVista</h1>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/React-18.2.0-61DAFB?style=flat-square&logo=react" alt="React">
-  <img src="https://img.shields.io/badge/TypeScript-4.9.5-3178C6?style=flat-square&logo=typescript" alt="TypeScript">
-  <img src="https://img.shields.io/badge/Node.js-Express-339933?style=flat-square&logo=node.js" alt="Node.js">
-  <img src="https://img.shields.io/badge/MySQL-Database-4479A1?style=flat-square&logo=mysql" alt="MySQL">
-  <img src="https://img.shields.io/badge/Material--UI-5.14-007FFF?style=flat-square&logo=mui" alt="MUI">
+  <b>手机价格比较平台</b>
 </p>
 
 <p align="center">
-  一款现代化的手机价格展示与管理系统，支持数据爬取、价格对比、库存管理等功能。
+  玻璃拟态 UI · 智能搜索筛选 · GSMArena 爬虫 · 图片代理 · 管理后台 · 定时同步
 </p>
 
 ---
 
-## ✨ 功能特性
+## 📌 项目简介
 
-- 🎨 **现代化UI** - 基于 Material-UI 的玻璃拟态设计，美观大方
-- 🔍 **智能搜索** - 支持按品牌、型号、颜色等多维度搜索
-- 💰 **价格筛选** - 支持价格区间滑动筛选
-- 📊 **多种排序** - 价格升序/降序、存储容量排序
-- 📦 **库存状态** - 实时显示现货/缺货状态
-- 🖼️ **手机图片** - 自动爬取并展示手机产品图
-- 📋 **详细参数** - 展示 CPU、电池、屏幕等核心规格
-- 🔄 **数据同步** - 支持定时自动同步数据
-- 🛠️ **管理后台** - 完整的数据管理与爬虫控制面板
+PhonePriceVista 是一款现代化的手机价格展示与管理系统，前端采用 React + Material-UI 玻璃拟态设计，后端基于 Express + MySQL 提供完整的数据管理 API。集成 GSMArena 爬虫自动获取手机规格和图片，支持按品牌/价格/库存多维度筛选，配备独立的管理后台和爬虫控制面板。
+
+---
+
+## ✨ 核心特性
+
+- 🎨 **玻璃拟态 UI** — 基于 Material-UI 的现代化设计，渐变色 + 毛玻璃效果
+- 🔍 **智能搜索筛选** — 支持品牌/型号/颜色搜索，防抖优化，价格区间滑动筛选
+- 📊 **多维度排序** — 价格升序/降序、存储容量排序
+- 📦 **库存状态** — 实时显示现货/怕抓/没货状态，彩色标签直观展示
+- 🖼️ **手机图片** — 自动爬取 GSMArena 产品图，图片代理解决防盗链
+- 📋 **详细参数** — 展示 CPU/电池/屏幕/摄像头/重量/尺寸等核心规格
+- 🔄 **数据同步** — 定时任务每天 0 点自动同步，支持手动触发
+- 🛠️ **管理后台** — 完整的手机/品牌 CRUD 管理，数据导入/导出
+- 🕷️ **爬虫面板** — GSMArena 爬虫控制，支持搜索/品牌爬取/批量导入
+- 📱 **详情弹窗** — 点击卡片查看完整参数和高清图片
+- ⚡ **双模式运行** — 支持无数据库（JSON 文件）和 MySQL 持久化两种模式
+- 🗄️ **服务端缓存** — 1 分钟 TTL 缓存机制，减少数据库查询
+
+---
+
+## 🛠️ 技术栈
+
+### 前端
+
+| 技术 | 用途 |
+|------|------|
+| **React 18** | 用户界面框架 |
+| **TypeScript** | 类型安全 |
+| **Material-UI 5** | UI 组件库 + 玻璃拟态设计 |
+| **Emotion** | CSS-in-JS 样式方案 |
+
+### 后端
+
+| 技术 | 用途 |
+|------|------|
+| **Node.js + Express** | Web 框架 + REST API |
+| **MySQL2** | 数据库驱动 |
+| **Axios** | HTTP 客户端（爬虫 + 图片代理） |
+| **Cheerio** | HTML 解析（GSMArena 爬虫） |
+| **Multer** | 文件上传处理 |
 
 ---
 
 ## 🚀 快速开始
 
-### 环境要求
+### 前置条件
 
-- **Node.js** >= 16.0.0
-- **npm** >= 8.0.0
-- **MySQL** >= 5.7 (可选，用于持久化存储)
+- Node.js >= 16.0.0
+- npm >= 8.0.0
+- MySQL >= 5.7（可选，不配置则使用 JSON 文件模式）
 
 ### 安装步骤
-
-#### 1. 克隆项目
 
 ```bash
 git clone https://github.com/aiyangdie/PhonePriceVista.git
 cd PhonePriceVista
-```
 
-#### 2. 安装前端依赖
-
-```bash
 npm install
-```
 
-#### 3. 安装后端依赖
-
-```bash
 cd server
 npm install
 cd ..
 ```
 
-#### 4. 配置环境变量
+### 配置环境变量
 
 在根目录创建 `.env` 文件：
 
 ```env
-# 数据库配置（可选）
 DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=your_password
 DB_NAME=phone_price_vista
 ```
 
-#### 5. 启动项目
+### 运行命令
 
-**方式一：使用启动脚本 (Windows)**
+**方式一：Windows 一键启动**
 
 ```bash
 start.bat
@@ -82,221 +108,76 @@ start.bat
 **方式二：手动启动**
 
 ```bash
-# 终端1 - 启动后端服务
 cd server
 npm start
 
-# 终端2 - 启动前端服务
+cd ..
 npm start
 ```
 
----
+### 访问地址
 
-## 🌐 访问地址
-
-| 服务 | 地址 | 说明 |
-|------|------|------|
-| 前端界面 | http://localhost:3000 | 手机价格展示主页面 |
-| 后端 API | http://localhost:3001 | RESTful API 服务 |
-| 管理后台 | http://localhost:3001/admin | 数据管理面板 |
-| 爬虫管理 | http://localhost:3001/crawler | 爬虫任务控制 |
+| 服务 | 地址 |
+|------|------|
+| 前端界面 | http://localhost:3000 |
+| 后端 API | http://localhost:3001 |
+| 管理后台 | http://localhost:3001/admin |
+| 爬虫管理 | http://localhost:3001/crawler |
 
 ---
 
-## 📁 项目结构
+## 📂 项目结构
 
 ```
 PhonePriceVista/
-├── public/                 # 静态资源
-│   └── *.json              # 手机数据文件
-├── src/                    # 前端源码
-│   ├── components/         # React 组件
-│   │   └── AdminPanel.tsx  # 管理面板组件
-│   ├── services/           # API 服务
-│   │   └── api.ts          # 接口封装
-│   ├── utils/              # 工具函数
-│   │   └── parseData.ts    # 数据解析
-│   ├── App.tsx             # 主应用组件
-│   ├── types.ts            # TypeScript 类型定义
-│   └── index.tsx           # 入口文件
-├── server/                 # 后端服务
-│   ├── database/           # 数据库相关
-│   │   └── init.js         # 数据库初始化
-│   ├── routes/             # API 路由
-│   │   ├── phones.js       # 手机数据接口
-│   │   └── crawler.js      # 爬虫接口
-│   ├── services/           # 业务服务
-│   │   ├── phoneCrawler.js     # 手机数据爬虫
+├── public/                     # 静态资源 & JSON 数据文件
+├── src/                        # 前端源码
+│   ├── components/
+│   │   └── AdminPanel.tsx      # 管理面板组件
+│   ├── services/
+│   │   └── api.ts              # API 接口封装
+│   ├── utils/
+│   │   └── parseData.ts        # 数据解析工具
+│   ├── App.tsx                 # 主应用组件
+│   ├── types.ts                # TypeScript 类型定义
+│   └── index.tsx               # 入口文件
+├── server/                     # 后端服务
+│   ├── config/
+│   │   └── db.js               # 数据库连接配置
+│   ├── database/
+│   │   ├── schema.sql          # 数据库 Schema
+│   │   ├── init.js             # 数据库初始化
+│   │   └── import-data.js      # 数据导入脚本
+│   ├── routes/
+│   │   ├── phones.js           # 手机数据 API
+│   │   └── crawler.js          # 爬虫 API
+│   ├── services/
 │   │   ├── gsmArenaCrawler.js  # GSMArena 爬虫
+│   │   ├── phoneCrawler.js     # 手机数据爬虫
 │   │   └── scheduler.js        # 定时任务
-│   ├── public/             # 后台静态页面
-│   │   ├── admin.html      # 管理后台
-│   │   └── crawler.html    # 爬虫管理
-│   └── index.js            # 服务入口
-├── .env                    # 环境变量配置
-├── .gitignore              # Git 忽略配置
-├── package.json            # 前端依赖配置
-├── tsconfig.json           # TypeScript 配置
-├── start.bat               # Windows 启动脚本
-└── README.md               # 项目说明文档
+│   ├── public/
+│   │   ├── admin.html          # 管理后台页面
+│   │   └── crawler.html        # 爬虫管理页面
+│   └── index.js                # 服务入口
+├── docs/                       # 文档
+├── .env                        # 环境变量
+├── package.json                # 前端依赖
+├── tsconfig.json               # TypeScript 配置
+├── start.bat                   # Windows 启动脚本
+├── LICENSE                     # MIT 开源协议
+└── README.md
 ```
 
 ---
 
-## 🔧 API 接口
+## 🤝 贡献与许可证
 
-### 手机数据接口
+欢迎贡献！请遵循以下流程：
 
-| 方法 | 路径 | 说明 |
-|------|------|------|
-| GET | `/api/phones` | 获取所有手机数据 |
-| GET | `/api/phones/groups` | 按品牌分组获取 |
-| GET | `/api/phones/with-specs` | 获取带规格参数的数据 |
-| POST | `/api/phones/import` | 导入手机数据 |
-| POST | `/api/phones/sync` | 同步数据到数据库 |
+1. **Fork** 本仓库
+2. 创建特性分支: `git checkout -b feature/amazing-feature`
+3. 提交更改: `git commit -m 'feat: add amazing feature'`
+4. 推送分支: `git push origin feature/amazing-feature`
+5. 提交 **Pull Request**
 
-### 爬虫接口
-
-| 方法 | 路径 | 说明 |
-|------|------|------|
-| POST | `/api/crawler/fetch-specs` | 爬取手机规格 |
-| POST | `/api/crawler/fetch-image` | 爬取手机图片 |
-| GET | `/api/crawler/status` | 获取爬虫状态 |
-
-### 其他接口
-
-| 方法 | 路径 | 说明 |
-|------|------|------|
-| GET | `/api/health` | 健康检查 |
-| GET | `/api/image-proxy?url=xxx` | 图片代理（解决防盗链） |
-
----
-
-## 📱 数据格式
-
-### 手机数据结构
-
-```typescript
-interface Phone {
-  brand: string;        // 品牌
-  model: string;        // 型号
-  color: string;        // 颜色
-  ram?: number;         // 运行内存 (GB)
-  storage?: number;     // 存储容量 (GB)
-  price: number;        // 当前价格
-  officialPrice?: number; // 官方价格
-  networkType: string;  // 网络类型 (4G/5G)
-  availability: string; // 库存状态
-  image?: string;       // 产品图片URL
-  specs?: {             // 详细规格
-    cpu?: string;       // 处理器
-    battery?: string;   // 电池容量
-    screenSize?: string; // 屏幕尺寸
-  };
-}
-```
-
----
-
-## 🛠️ 技术栈
-
-### 前端
-- **React 18** - 用户界面框架
-- **TypeScript** - 类型安全
-- **Material-UI 5** - UI 组件库
-- **Emotion** - CSS-in-JS 样式方案
-
-### 后端
-- **Node.js** - 运行环境
-- **Express** - Web 框架
-- **MySQL2** - 数据库驱动
-- **Axios** - HTTP 客户端
-- **Cheerio** - HTML 解析（爬虫）
-
----
-
-## 📝 使用说明
-
-### 1. 导入数据
-
-1. 访问管理后台 `http://localhost:3001/admin`
-2. 上传包含手机数据的 JSON 文件
-3. 点击"同步到数据库"保存数据
-
-### 2. 爬取手机规格
-
-1. 访问爬虫管理 `http://localhost:3001/crawler`
-2. 选择需要爬取的手机品牌
-3. 点击"开始爬取"自动获取规格和图片
-
-### 3. 前端浏览
-
-1. 访问 `http://localhost:3000`
-2. 使用左侧菜单按品牌筛选
-3. 使用顶部搜索框搜索特定型号
-4. 调整价格滑块筛选价格区间
-5. 点击手机卡片查看详细信息
-
----
-
-## ⚙️ 配置说明
-
-### 数据库配置
-
-项目支持两种模式：
-
-1. **无数据库模式** - 使用 JSON 文件存储数据
-2. **MySQL 模式** - 使用 MySQL 持久化存储
-
-配置 MySQL 需要在 `.env` 文件中设置：
-
-```env
-DB_HOST=localhost
-DB_USER=root
-DB_PASSWORD=your_password
-DB_NAME=phone_price_vista
-```
-
-### 定时任务
-
-系统默认每天 00:00 自动同步数据，可在 `server/services/scheduler.js` 中修改。
-
----
-
-## 🤝 贡献指南
-
-1. Fork 本项目
-2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 提交 Pull Request
-
----
-
-## 📄 开源协议
-
-本项目基于 MIT 协议开源，详见 [LICENSE](LICENSE) 文件。
-
----
-
-## 👤 作者
-
-**aiyang**
-
-- GitHub: [@aiyangdie](https://github.com/aiyangdie)
-- Email: aike1015@qq.com
-
----
-
-## 🙏 致谢
-
-- [React](https://reactjs.org/)
-- [Material-UI](https://mui.com/)
-- [Express](https://expressjs.com/)
-- [GSMArena](https://www.gsmarena.com/) - 手机规格数据来源
-
----
-
-<p align="center">
-  如果这个项目对你有帮助，请给一个 ⭐ Star 支持一下！
-</p>
+本项目基于 **MIT License** 开源协议。详见 [LICENSE](LICENSE)。
