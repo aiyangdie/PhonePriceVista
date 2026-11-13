@@ -22,7 +22,7 @@ export function getProxyImageUrl(imageUrl: string | undefined): string | undefin
   if (!imageUrl) return undefined;
   // 仓库内置静态图（brand/ 开头）直接走部署前缀，不经过后端代理
   if (imageUrl.startsWith('brand/')) {
-    return `${process.env.PUBLIC_URL}/${imageUrl}`;
+    return `${process.env.PUBLIC_URL}/${imageUrl}?v=2`;
   }
   return `${API_BASE}/image-proxy?url=${encodeURIComponent(imageUrl)}`;
 }
