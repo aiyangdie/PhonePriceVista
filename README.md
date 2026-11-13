@@ -1,3 +1,5 @@
+<p align="center"><img src="assets/covers/35-PhonePriceVista.jpg" alt="PhonePriceVista 项目封面" width="100%"></p>
+
 <p align="center">
   <img src="https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react" alt="React">
   <img src="https://img.shields.io/badge/TypeScript-4.9-3178C6?style=for-the-badge&logo=typescript" alt="TypeScript">
