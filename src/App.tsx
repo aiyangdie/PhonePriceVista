@@ -975,6 +975,13 @@ function App() {
                     sx={{ bgcolor: '#ede9fe', color: '#5b21b6', fontWeight: 500 }}
                   />
                 )}
+                <Chip
+                  label="导出 CSV"
+                  size="small"
+                  clickable
+                  onClick={handleExportCSV}
+                  sx={{ bgcolor: '#e0f2fe', color: '#075985', fontWeight: 600 }}
+                />
               </Box>
             </Box>
 
