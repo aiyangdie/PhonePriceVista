@@ -241,29 +241,31 @@ const PhoneCard = memo(({ phone, onShowDetail, index = 0 }: { phone: Phone; onSh
 
       {/* 配置信息 */}
       <Box display="flex" gap={1} mb={2} flexWrap="wrap">
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 0.5,
-            px: 1,
-            py: 0.5,
-            bgcolor: '#f8fafc',
-            borderRadius: 1.5,
-            fontSize: 12,
-          }}
-        >
+        {phone.color && (
           <Box
             sx={{
-              width: 10,
-              height: 10,
-              borderRadius: '50%',
-              bgcolor: colorMap[phone.color || ''] || '#9ca3af',
-              border: '1px solid rgba(0,0,0,0.1)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 0.5,
+              px: 1,
+              py: 0.5,
+              bgcolor: '#f8fafc',
+              borderRadius: 1.5,
+              fontSize: 12,
             }}
-          />
-          <span>{phone.color || '默认'}</span>
-        </Box>
+          >
+            <Box
+              sx={{
+                width: 10,
+                height: 10,
+                borderRadius: '50%',
+                bgcolor: colorMap[phone.color] || '#9ca3af',
+                border: '1px solid rgba(0,0,0,0.1)',
+              }}
+            />
+            <span>{phone.color}</span>
+          </Box>
+        )}
         {((phone.ram || 0) > 0 || (phone.storage || 0) > 0) && (
           <Box
             sx={{
