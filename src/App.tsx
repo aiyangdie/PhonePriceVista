@@ -464,6 +464,25 @@ function App() {
     return phones;
   }, [phoneGroups, selectedBrand, debouncedSearch, priceRange, availabilityFilter, sortBy]);
 
+  // 导出当前筛选结果为 CSV（带 BOM，Excel 打开不乱码）
+  const handleExportCSV = useCallback(() => {
+    const header = ['品牌', '型号', '内存(GB)', '存储(GB)', '颜色', '价格(元)', '网络', '库存状态'];
+    const rows = filteredPhones.map(p => [
+      p.brand, p.model, p.ram, p.storage, p.color, p.price, p.networkType, p.availability,
+    ]);
+    const esc = (v: unknown) => `"${String(v ?? '').replace(/"/g, '""')}"`;
+    const csv = '\uFEFF' + [header, ...rows].map(r => r.map(esc).join(',')).join('\r\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `手机报价_${filteredPhones.length}款.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }, [filteredPhones]);
+
   if (loading) {
     return (
       <ThemeProvider theme={theme}>
