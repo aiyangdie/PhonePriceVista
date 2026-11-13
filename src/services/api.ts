@@ -20,6 +20,10 @@ const fetchWithTimeout = async (url: string, options: RequestInit = {}, timeout 
 // 图片代理URL - 解决防盗链问题
 export function getProxyImageUrl(imageUrl: string | undefined): string | undefined {
   if (!imageUrl) return undefined;
+  // 仓库内置静态图（brand/ 开头）直接走部署前缀，不经过后端代理
+  if (imageUrl.startsWith('brand/')) {
+    return `${process.env.PUBLIC_URL}/${imageUrl}`;
+  }
   return `${API_BASE}/image-proxy?url=${encodeURIComponent(imageUrl)}`;
 }
 
