@@ -21,8 +21,8 @@ const fetchWithTimeout = async (url: string, options: RequestInit = {}, timeout 
 export function getProxyImageUrl(imageUrl: string | undefined): string | undefined {
   if (!imageUrl) return undefined;
   // 仓库内置静态图（brand/ 开头）直接走部署前缀，不经过后端代理
-  if (imageUrl.startsWith('brand/')) {
-    return `${process.env.PUBLIC_URL}/${imageUrl}?v=2`;
+  if (imageUrl.startsWith('brand/') || imageUrl.startsWith('models/')) {
+    return `${process.env.PUBLIC_URL}/${imageUrl}?v=3`;
   }
   return `${API_BASE}/image-proxy?url=${encodeURIComponent(imageUrl)}`;
 }

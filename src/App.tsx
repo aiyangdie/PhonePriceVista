@@ -483,64 +483,6 @@ function App() {
     URL.revokeObjectURL(url);
   }, [filteredPhones]);
 
-  if (loading) {
-    return (
-      <ThemeProvider theme={theme}>
-        <Box 
-          display="flex" 
-          flexDirection="column"
-          justifyContent="center" 
-          alignItems="center" 
-          minHeight="100vh"
-          sx={{ bgcolor: 'transparent', position: 'relative', zIndex: 1 }}
-        >
-          <Box
-            sx={{
-              bgcolor: 'rgba(255, 255, 255, 0.9)',
-              backdropFilter: 'blur(20px)',
-              borderRadius: 5,
-              p: 6,
-              textAlign: 'center',
-              boxShadow: '0 25px 50px rgba(0,0,0,0.15)',
-              border: '1px solid rgba(255,255,255,0.8)',
-              animation: 'fadeInUp 0.6s ease',
-            }}
-          >
-            <Box sx={{ position: 'relative', display: 'inline-flex', mb: 3 }}>
-              <CircularProgress 
-                size={60} 
-                thickness={4}
-                sx={{ 
-                  color: '#667eea',
-                  '& .MuiCircularProgress-circle': {
-                    strokeLinecap: 'round',
-                  },
-                }} 
-              />
-              <Box
-                sx={{
-                  position: 'absolute',
-                  top: '50%',
-                  left: '50%',
-                  transform: 'translate(-50%, -50%)',
-                  fontSize: 24,
-                }}
-              >
-                📱
-              </Box>
-            </Box>
-            <Typography variant="h5" fontWeight={700} sx={{ mb: 1, background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-              正在加载数据
-            </Typography>
-            <Typography variant="body2" color="text.secondary" fontWeight={500}>
-              请稍候，精彩即将呈现...
-            </Typography>
-          </Box>
-        </Box>
-      </ThemeProvider>
-    );
-  }
-
   if (error) {
     return (
       <ThemeProvider theme={theme}>
