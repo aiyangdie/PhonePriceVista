@@ -30,6 +30,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { PhoneGroup, Phone } from './types';
 import { parsePhoneData } from './utils/parseData';
 import { fetchPhoneGroups, checkHealth, fetchPhoneGroupsWithSpecs, getProxyImageUrl } from './services/api';
+import { localPhoneGroups } from './data/phones';
 
 const theme = createTheme({
   palette: {
@@ -391,16 +392,8 @@ function App() {
           parsedData = await fetchPhoneGroups();
         }
       } else {
-        // 从本地 JSON 文件获取数据
-        const response = await fetch('/2025年5月02日.json');
-        if (!response.ok) {
-          throw new Error('数据文件不存在或无法访问');
-        }
-        const data = await response.text();
-        if (!data.trim()) {
-          throw new Error('数据文件为空');
-        }
-        parsedData = parsePhoneData(data);
+        // 内置报价数据：没有后端时也能完整展示
+        parsedData = localPhoneGroups;
       }
       
       if (parsedData.length === 0) {
